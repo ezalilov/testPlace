@@ -1,20 +1,44 @@
+import uuid
 import csv
 import xml.etree.cElementTree as ET
 
-def getGeoPositions(root):
-	csvfile = open("AdminNames.csv", "wb")
-	fieldnames = ['id', 'NameLevel1', 'NameLevel2', 'NameLevel3', 'NameLevel4']
-	wrtr = csv.DictWriter(csvfile, fieldnames=fieldnames)
-
-	for item in root.iter('AdminName'):
-		lev1 = item.find('Level1').text
-		lev2 = item.find('Level2').text
-		lev3 = item.find('Level3').text
-		lev4 = item.find('Level4').text
-		wrtr.writerow({'NameLevel1': lev1, 'NameLevel2': lev2, 'NameLevel3': lev3, 'NameLevel4': lev4})
-
+def openPlaceCsvForWrite(fileName):
+	csvfile = open(fileName,'wb')
+	fieldNames = ['TimeStamp', 'PlaceId', 'LocationId', 'ContactId', 'NameId', 'CategoryListId']
+	wrtr = csv.DictWriter(csvfile, fieldnames=fieldNames)
+	writePlace(root,wrtr)
 	csvfile.close()
 
+def writePlace(root,wrtr):
+ 	for item in root.iter('Place'):
+		for identity in item.iter('Identity'):
+			timeStamp = identity.find('TimeStamp').text
+			placeId = identity.find('PlaceId').text
+#			print timeStamp, placeId
+			print  'in writePlace'
+			nameId = openNamesCsvForWrite('Names.csv')
+			wrtr.writerow({'TimeStamp': timeStamp, 'PlaceId': placeId, 'NameId': nameId})
+
+def openNamesCsvForWrite(fileName):
+	csvfile = open(fileName, "wb")
+	fieldNames = ['NameId', 'NameType', 'BaseText']
+	wrtr = csv.DictWriter(csvfile, fieldnames=fieldNames)
+	print 'in openNamesCsvForWrite'
+	return writeNames(root,wrtr)
+	csvfile.close()
+
+def writeNames(root,wrtr):
+	for item in root.iter('BaseText'):
+		nameId = uuid.uuid1()
+		namType = item.get('type')
+		basText = item.text
+#		print basName, strType
+		wrtr.writerow({'NameId': nameId, 'NameType': namType, 'BaseText': basText})
+		print nameId, 'in writeNames'
+		return nameId
 
 tree = ET.parse('sample.xml')
 root = tree.getroot()
+
+openPlaceCsvForWrite('Place.csv')
+#writePlace(root,wrtr)
