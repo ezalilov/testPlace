@@ -1,2 +1,1 @@
-if 'asd' in 'asdasdsadvdas asdascsdasxcc asdas':
-	print u"is in!"
+print len('4daf91de-89b0-11e6-9624-10c37b4f375f')

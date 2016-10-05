@@ -57,8 +57,10 @@ def getCategoryList(root):
 	fieldnames = ['id', 'CategorySystem', 'CategoryId', 'CategoryName']
 	wrtr = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
-	for item in root.iterfind('./Place/CategoryList//'):
+	for item in root.iter('Category'):
+		print item.tag
 		catSys = item.get('categorySystem')
+		print catSys,'after'
 
 		catId = item.find('CategoryId')
 		if catId != None:
@@ -67,7 +69,7 @@ def getCategoryList(root):
 		catName = item.find('Text')
 		if catName != None:
 			catName = catName.text
-
+			
 		wrtr.writerow({'CategorySystem': catSys, 'CategoryId': catId, 'CategoryName': catName})
 
 	csvfile.close()
@@ -169,9 +171,9 @@ def getCountryCodes(root):
 tree = ET.parse('sample.xml')
 root = tree.getroot()
 
-getGeoPositions(root)
-getAdminNames(root)
+#getGeoPositions(root)
+#getAdminNames(root)
 getCategoryList(root)
-getNameList(root)
-getStreetName(root)
-getCountryCodes(root)
+#getNameList(root)
+#getStreetName(root)
+#getCountryCodes(root)
