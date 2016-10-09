@@ -1,6 +1,7 @@
 #!/bin/env python2.7.11
 import uuid
 import csv
+from collections import Counter
 import xml.etree.cElementTree as ET
 
 def createCsv(fileName, fieldNames):
@@ -21,6 +22,7 @@ def writePlaces(root):
 										'NameId': nameId,
 										'ContactListId': contactListId,
 										'CategoryListId':categoryListId})
+
 def writeCategoryList(categoryList):
 	categoryListId = uuid.uuid1()
 	for category in categoryList.iter('Category'):
@@ -173,40 +175,42 @@ def countText(root):
 			dictText[text]=1
 	return dictText
 
+if __name__ == '__main__':
+	#main section create all CSV files
+	placesFile = createCsv('PlaceList.csv',['PlaceId','TimeStamp','LocationId','ContactListId','NameId','CategoryListId'])
+	locationFile = createCsv('LocationList.csv',['LocationId','AddressId','GeoPositionId'])
+	geoPositionFile = createCsv('GeoPositionList.csv',['GeoPositionId', 'Latitude', 'Longitude','Altitude'])
+	addressFile = createCsv('Adress.csv',['AddressId','StreetId','HouseNumber','CountryCodeId','AdminNameId','PostalCode'])
+	streetNameFile = createCsv('StreetNames.csv',['StreetId', 'BaseName', 'StreetType'])
+	countryCodeFile = createCsv('CountryCodes.csv',['CountryCodeId', 'CountryCode', 'AdminLevel1', 'AdminLevel2', 'AdminLevel3', 'AdminLevel4'])
+	namesFile = createCsv('NameList.csv',['NameId', 'NameType', 'BaseText'])
+	contactFile = createCsv('Contact.csv',['ContactId', 'ContactType', 'ContactString','ContactListId'])
+	contactListFile = createCsv('ContactList.csv',['ContactListId'])
+	categoryFile = createCsv('Category.csv', ['CategoryId', 'CategorySystem', 'Category', 'CategoryName','CategoryListId'])
+	categoryListFile = createCsv('CategoryList.csv',['CategoryListId'])
+	adminNameFile = createCsv('AdminNameList.csv',['AdminNameId', 'NameLevel1', 'NameLevel2', 'NameLevel3', 'NameLevel4'])
+	statisticsFile=createCsv('Statistics.csv',['PlaceQuantity','CategoryIdQuantity','TextQuantity'])
 
-#main section create all CSV files
-placesFile = createCsv('PlaceList.csv',['PlaceId','TimeStamp','LocationId','ContactListId','NameId','CategoryListId'])
-locationFile = createCsv('LocationList.csv',['LocationId','AddressId','GeoPositionId'])
-geoPositionFile = createCsv('GeoPositionList.csv',['GeoPositionId', 'Latitude', 'Longitude','Altitude'])
-addressFile = createCsv('Adress.csv',['AddressId','StreetId','HouseNumber','CountryCodeId','AdminNameId','PostalCode'])
-streetNameFile = createCsv('StreetNames.csv',['StreetId', 'BaseName', 'StreetType'])
-countryCodeFile = createCsv('CountryCodes.csv',['CountryCodeId', 'CountryCode', 'AdminLevel1', 'AdminLevel2', 'AdminLevel3', 'AdminLevel4'])
-namesFile = createCsv('NameList.csv',['NameId', 'NameType', 'BaseText'])
-contactFile = createCsv('Contact.csv',['ContactId', 'ContactType', 'ContactString','ContactListId'])
-contactListFile = createCsv('ContactList.csv',['ContactListId'])
-categoryFile = createCsv('Category.csv', ['CategoryId', 'CategorySystem', 'Category', 'CategoryName','CategoryListId'])
-categoryListFile = createCsv('CategoryList.csv',['CategoryListId'])
-adminNameFile = createCsv('AdminNameList.csv',['AdminNameId', 'NameLevel1', 'NameLevel2', 'NameLevel3', 'NameLevel4'])
-statisticsFile=createCsv('Statistics.csv',['PlaceQuantity','CategoryIdQuantity','TextQuantity'])
 
 
-tree = ET.parse('sample.xml')
-root = tree.getroot()
+	tree = ET.parse('sample.xml')
+	root = tree.getroot()
 
-writePlaces(root)
-getStatistics(root)
+	writePlaces(root)
+	getStatistics(root)
 
-statisticsFile['Csvfile'].close()
-placesFile['Csvfile'].close()
-namesFile['Csvfile'].close()
-contactFile['Csvfile'].close()
-categoryListFile['Csvfile'].close()
-categoryFile['Csvfile'].close()
-adminNameFile['Csvfile'].close()
-countryCodeFile['Csvfile'].close()
-streetNameFile['Csvfile'].close()
-addressFile['Csvfile'].close()
-geoPositionFile['Csvfile'].close()
-locationFile['Csvfile'].close()
 
-print 'done'
+	statisticsFile['Csvfile'].close()
+	placesFile['Csvfile'].close()
+	namesFile['Csvfile'].close()
+	contactFile['Csvfile'].close()
+	categoryListFile['Csvfile'].close()
+	categoryFile['Csvfile'].close()
+	adminNameFile['Csvfile'].close()
+	countryCodeFile['Csvfile'].close()
+	streetNameFile['Csvfile'].close()
+	addressFile['Csvfile'].close()
+	geoPositionFile['Csvfile'].close()
+	locationFile['Csvfile'].close()
+
+	print 'done'

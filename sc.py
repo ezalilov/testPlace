@@ -1,6 +1,7 @@
 #!/bin/env python2.7.11
 import uuid
 import csv
+from collections import Counter
 import xml.etree.cElementTree as ET
 
 def createCsv(fileName, fieldNames):
@@ -21,6 +22,7 @@ def writePlaces(root):
 										'NameId': nameId,
 										'ContactListId': contactListId,
 										'CategoryListId':categoryListId})
+
 def writeCategoryList(categoryList):
 	categoryListId = uuid.uuid1()
 	for category in categoryList.iter('Category'):
@@ -53,6 +55,7 @@ def writeCategory(category,categoryListId):
 	catName = category.find('./CategoryName/Text')
 	if catName != None:
 		catName = catName.text
+        print catSys, catId, catName
 	categoryFile['Wrtr'].writerow({'CategoryId':catListId,'CategorySystem':catSys,'Category':catId,
 									'CategoryName':catName,'CategoryListId':categoryListId})
 
@@ -140,6 +143,39 @@ def writeAddress(address):
 									'CountryCodeId':countryCodeId,'AdminNameId':adminNameId,'PostalCode':posCode})
 	return addressId
 
+def getStatistics(root):
+	placeQuantity=0
+	for place in root.iter('Place'):
+		placeQuantity+=1
+	dictCategoryId = countCategoryId(root)
+	dictText = countText(root)
+	statisticsFile['Wrtr'].writerow({'PlaceQuantity':placeQuantity,'CategoryIdQuantity':dictCategoryId,'TextQuantity':dictText})
+        return placeQuantity
+
+def countCategoryId(root):
+	dictCategoryId={}
+	listCategory=[]
+	for categoryId in root.iter('CategoryId'):
+		listCategory.append(categoryId.text)
+	for elem in listCategory:
+		if elem in dictCategoryId:
+			dictCategoryId[elem]+=1
+		else:
+			dictCategoryId[elem]=1
+	return dictCategoryId
+
+def countText(root):
+	dictText={}
+	listText=[]
+	for tag in root.iter('BaseText'):
+		textAttrb = tag.get('languageCode')
+		listText.append(textAttrb)
+	for text in listText:
+		if text in dictText:
+			dictText[text]+=1
+		else:
+			dictText[text]=1
+	return dictText
 
 #main section create all CSV files
 placesFile = createCsv('PlaceList.csv',['PlaceId','TimeStamp','LocationId','ContactListId','NameId','CategoryListId'])
@@ -154,13 +190,18 @@ contactListFile = createCsv('ContactList.csv',['ContactListId'])
 categoryFile = createCsv('Category.csv', ['CategoryId', 'CategorySystem', 'Category', 'CategoryName','CategoryListId'])
 categoryListFile = createCsv('CategoryList.csv',['CategoryListId'])
 adminNameFile = createCsv('AdminNameList.csv',['AdminNameId', 'NameLevel1', 'NameLevel2', 'NameLevel3', 'NameLevel4'])
+statisticsFile=createCsv('Statistics.csv',['PlaceQuantity','CategoryIdQuantity','TextQuantity'])
+
 
 
 tree = ET.parse('sample.xml')
 root = tree.getroot()
 
 writePlaces(root)
+getStatistics(root)
 
+'''
+statisticsFile['Csvfile'].close()
 placesFile['Csvfile'].close()
 namesFile['Csvfile'].close()
 contactFile['Csvfile'].close()
@@ -172,5 +213,5 @@ streetNameFile['Csvfile'].close()
 addressFile['Csvfile'].close()
 geoPositionFile['Csvfile'].close()
 locationFile['Csvfile'].close()
-
+'''
 print 'done'

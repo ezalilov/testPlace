@@ -1,6 +1,6 @@
 use PlaceList
 go
-
+-- необходимо менять путь файла при смены носителя. Код не переносим
 BULK
 INSERT GeoPositions
 FROM 'E:\Education\yourself\for_Softech\Test\Work\GeoPositionList.csv'

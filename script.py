@@ -1,29 +1,17 @@
-import os
-import csv
-import fileinput
-import xml.etree.cElementTree as ET
+from lxml import etree
 
-def setNumberLine(fileName):
-	for line in fileinput.input(fileName, inplace=True):
-		print "%d%s" % (fileinput.filelineno(), line)
 
-XML_FILE = os.path.join('sample.xml')
-tree = ET.ElementTree(file=XML_FILE)
-root = tree.getroot()
+tree = etree.parse('sample.xml')
 
-csvfile = open("Address.csv", "wb")
-fieldnames = ['id', 'StreeId', 'HouseNumber', 'CountryCodeId', 'AdminNameId', 'PostalCode']
-wrtr = csv.DictWriter(csvfile, fieldnames=fieldnames)
-
-for item in root.iter('Parsed'):
-	houNumber = item.find('HouseNumber')
-	if houNumber != None:
-		houNumber = houNumber.text
-	print houNumber
-
-	with open('names.csv') as csvfile:
-    reader = csv.DictReader(csvfile)
-    for row in reader:
-        print(row['first_name'], row['last_name'])
+nodes = tree.xpath('/PlaceList/Place/CategoryList/Category')
+for node in nodes:
+	catSys = node.get('categorySystem')
+	catId = node.find('CategoryId')
+	if catId != None:
+		catId = catId.text
+	catName = node.find('./CategoryName/Text')
+	if catName != None:
+		catName = catName.text
+	print {'catSys':catSys,'catId':catId,'catName':catName}
 
 
