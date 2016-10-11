@@ -55,7 +55,7 @@ def writeCategory(category,categoryListId):
 	catName = category.find('./CategoryName/Text')
 	if catName != None:
 		catName = catName.text
-        print catSys, catId, catName
+#        print catSys, catId, catName
 	categoryFile['Wrtr'].writerow({'CategoryId':catListId,'CategorySystem':catSys,'Category':catId,
 									'CategoryName':catName,'CategoryListId':categoryListId})
 
@@ -177,6 +177,12 @@ def countText(root):
 			dictText[text]=1
 	return dictText
 
+def parseFile(file):
+    tree = ET.parse(file)
+    root = tree.getroot()
+    return root
+
+
 #main section create all CSV files
 placesFile = createCsv('PlaceList.csv',['PlaceId','TimeStamp','LocationId','ContactListId','NameId','CategoryListId'])
 locationFile = createCsv('LocationList.csv',['LocationId','AddressId','GeoPositionId'])
@@ -194,13 +200,12 @@ statisticsFile=createCsv('Statistics.csv',['PlaceQuantity','CategoryIdQuantity',
 
 
 
-tree = ET.parse('sample.xml')
-root = tree.getroot()
+root = parseFile('sample.xml')
 
 writePlaces(root)
 getStatistics(root)
 
-'''
+
 statisticsFile['Csvfile'].close()
 placesFile['Csvfile'].close()
 namesFile['Csvfile'].close()
@@ -213,5 +218,5 @@ streetNameFile['Csvfile'].close()
 addressFile['Csvfile'].close()
 geoPositionFile['Csvfile'].close()
 locationFile['Csvfile'].close()
-'''
+
 print 'done'
