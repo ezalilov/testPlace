@@ -1,4 +1,4 @@
-#!/bin/env python2.7.11
+#!/bin/env python
 import uuid
 import csv
 import xml.etree.cElementTree as ET
@@ -178,7 +178,7 @@ def countText(root):
 placesFile = createCsv('PlaceList.csv',['PlaceId','TimeStamp','LocationId','ContactListId','NameId','CategoryListId'])
 locationFile = createCsv('LocationList.csv',['LocationId','AddressId','GeoPositionId'])
 geoPositionFile = createCsv('GeoPositionList.csv',['GeoPositionId', 'Latitude', 'Longitude','Altitude'])
-addressFile = createCsv('Adress.csv',['AddressId','StreetId','HouseNumber','CountryCodeId','AdminNameId','PostalCode'])
+addressFile = createCsv('Address.csv',['AddressId','StreetId','HouseNumber','CountryCodeId','AdminNameId','PostalCode'])
 streetNameFile = createCsv('StreetNames.csv',['StreetId', 'BaseName', 'StreetType'])
 countryCodeFile = createCsv('CountryCodes.csv',['CountryCodeId', 'CountryCode', 'AdminLevel1', 'AdminLevel2', 'AdminLevel3', 'AdminLevel4'])
 namesFile = createCsv('NameList.csv',['NameId', 'NameType', 'BaseText'])

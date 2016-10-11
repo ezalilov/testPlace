@@ -24,7 +24,7 @@ GO
 
 BULK
 INSERT [Address]
-FROM 'E:\Education\yourself\for_Softech\Test\Work\Adress.csv'
+FROM 'E:\Education\yourself\for_Softech\Test\Work\Address.csv'
 WITH
 (FIELDTERMINATOR = ',', ROWTERMINATOR = '\n')
 GO

@@ -1,4 +1,4 @@
-#!/bin/env python2.7.11
+#!/bin/env python
 import uuid
 import csv
 from collections import Counter

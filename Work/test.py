@@ -225,7 +225,3 @@ class TestPlaceListAndGetStatistics(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)
-
-#Для запуска выборочных тестов
-#    suite = unittest.TestSuite(map(TestPlaceListAndGetStatistics, ['testGetStatistics']))
-#    unittest.TextTestRunner(verbosity=2).run(suite)
