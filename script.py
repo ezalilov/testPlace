@@ -1,6 +1,12 @@
 from lxml import etree
 import csv
 
+def timer(reps, func, *args):
+    import time
+    start = time.clock()
+    for i in range(reps):
+        apply(func, args)
+    return time.clock() - start
 
 tree = etree.parse('sample.xml')
 
